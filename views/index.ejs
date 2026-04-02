@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — EduCloud</title>
+  <link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="nav-logo">🎓 EduCloud</span>
+  <div class="nav-links">
+    <a href="/" class="active">Register</a>
+    <a href="/students">View Students</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Student Registration</h1>
+  <p>Fill in your details to register</p>
+</div>
+
+<div class="container">
+  <div class="card">
+
+    <% if (success) { %>
+      <div class="alert alert-success">✅ <%= success %></div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="alert alert-error">❌ <%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/register" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name"
+               placeholder="e.g. Sophea Chan"
+               value="<%= old.name || '' %>"/>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email"
+               placeholder="e.g. sophea@example.com"
+               value="<%= old.email || '' %>"/>
+      </div>
+
+      <div class="form-group">
+        <label>Student ID</label>
+        <input type="text" name="student_id"
+               placeholder="e.g. STU-2024-001"
+               value="<%= old.student_id || '' %>"/>
+      </div>
+
+      <div class="form-group">
+        <label>Course</label>
+        <select name="course">
+          <option value="">-- Select your course --</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Information Technology">Information Technology</option>
+          <option value="Cloud Computing">Cloud Computing</option>
+          <option value="Cybersecurity">Cybersecurity</option>
+          <option value="Data Science">Data Science</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Profile Photo <span style="color:#aaa;font-weight:400">(optional)</span></label>
+        <input type="file" name="photo" accept="image/*"/>
+        <p class="form-hint">JPG or PNG, max 5MB.</p>
+      </div>
+
+      <hr class="divider"/>
+
+      <button type="submit" class="btn btn-primary">Register Student</button>
+
+    </form>
+  </div>
+</div>
+
+<div class="footer">
+  EduCloud &copy; 2024 — Hosted on AWS EC2 + RDS + S3
+</div>
+
+</body>
+</html>
