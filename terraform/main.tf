@@ -14,7 +14,7 @@ data "aws_ami" "amazone_linux" {
 
 resource "aws_launch_template" "web" {
     name_prefix = "${var.project_name}-lt-"
-    image_id = data.aws_ami.amazone_linux
+    image_id = data.aws_ami.amazone_linux.id
     instance_type = var.instance_type
 
     iam_instance_profile {
@@ -23,10 +23,10 @@ resource "aws_launch_template" "web" {
 
     vpc_security_group_ids = [aws_security_group.ec2.id]
 
-    user_data = base64decode(templatefile("user-data.sh" ,{
+    user_data = base64encode(templatefile("user-data.sh" ,{
         db_host = aws_db_instance.mysql.address
         db_name = var.db_name
-        db_name = var.db_username
+        db_user = var.db_username
         db_password = var.db_password
         aws_region = var.region
         s3_bucket = var.s3_bucket_name
@@ -44,8 +44,8 @@ resource "aws_autoscaling_group" "web" {
     name = "${var.project_name}-asg"
 
     vpc_zone_identifier = [
-        aws_subnet.public_1.id,
-        aws_subnet.public_2.id
+        aws_subnet.private_1.id,
+        aws_subnet.private_2.id
     ]
 
     max_size = var.asg_max_size
@@ -81,7 +81,7 @@ resource "aws_autoscaling_group" "web" {
 
 resource "aws_autoscaling_policy" "scale_up" {
     name = "${var.project_name}-scale-up"
-    autoscaling_group_name = aws.autoscaling_group.web.name
+    autoscaling_group_name = autoscaling_group.web.name
     adjustment_type = "ChangeInCapacity"
     scaling_adjustment = 1
     cooldown = 120
@@ -89,7 +89,8 @@ resource "aws_autoscaling_policy" "scale_up" {
 
 resource "aws_autoscaling_policy" "scale_down" {
     name = "${var.project_name}-scale-down"
-    autoscaling_group_name = aws.aws_autoscaling_group.web.name
-    adjustment_type = -1
+    autoscaling_group_name = aws_autoscaling_group.web.name
+    adjustment_type = "ChangeInCapacity"
+    scaling_adjustment = -1
     cooldown = 120
 }
