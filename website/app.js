@@ -8,6 +8,7 @@
 const express = require('express')
 const path    = require('path')
 require('dotenv').config()
+const db = require('./db')
 
 const app = express()
 
@@ -32,6 +33,16 @@ app.use('/', studentRoutes)
 
 // ── Start the server
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`)
+
+async function bootstrap() {
+  await db.initializeSchema()
+
+  app.listen(PORT, () => {
+    console.log(`✅ Server running at http://localhost:${PORT}`)
+  })
+}
+
+bootstrap().catch((err) => {
+  console.error('Failed to initialize database or start server:', err)
+  process.exit(1)
 })
