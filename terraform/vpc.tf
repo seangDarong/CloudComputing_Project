@@ -3,7 +3,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = { Name = "project-vpc" }
+  tags = { Name = "${var.project_name}-vpc" }
 }
 
 resource "aws_subnet" "public_1" {
@@ -36,7 +36,7 @@ resource "aws_subnet" "private_2" {
 
 resource "aws_internet_gateway" "main" {
     vpc_id = aws_vpc.main.id
-    tags = {Name = "project-igw"}
+    tags = {Name = "${var.project_name}-igw"}
 }
 
 resource "aws_route_table" "public" {
