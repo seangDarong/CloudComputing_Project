@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+
 # =============================================
 # user-data.sh — EC2 Startup Script
 # =============================================
@@ -16,27 +18,27 @@ echo "Starting setup..."
 # ── Step 1: Update the system
 yum update -y
 
-# ── Step 2: Install Node.js 18
-curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
-yum install -y nodejs
+# ── Step 2: Install Node.js and Git
+if command -v dnf >/dev/null 2>&1; then
+	dnf install -y nodejs npm git
+else
+	yum install -y nodejs npm git
+fi
 
 # Verify Node.js installed
 echo "Node version: $(node --version)"
 echo "NPM version: $(npm --version)"
 
-# ── Step 3: Install Git
-yum install -y git
-
-# ── Step 4: Clone your website from GitHub
+# ── Step 3: Clone your website from GitHub
 git clone ${github_repo} /app
 
-# ── Step 5: Go into website folder
+# ── Step 4: Go into website folder
 cd /app/website
 
-# ── Step 6: Install npm packages
+# ── Step 5: Install npm packages
 npm install
 
-# ── Step 7: Set environment variables
+# ── Step 6: Set environment variables
 # These replace your .env file on EC2
 # Values come from Terraform variables
 cat > /app/website/.env << EOF
@@ -49,15 +51,15 @@ S3_BUCKET=${s3_bucket}
 PORT=3000
 EOF
 
-# ── Step 8: Install PM2
+# ── Step 7: Install PM2
 # PM2 keeps your Node.js app running
 # If it crashes, PM2 restarts it automatically
 npm install -g pm2
 
-# ── Step 9: Start the website with PM2
+# ── Step 8: Start the website with PM2
 pm2 start app.js --name "student-website"
 
-# ── Step 10: Make PM2 start on reboot
+# ── Step 9: Make PM2 start on reboot
 pm2 startup
 pm2 save
 
