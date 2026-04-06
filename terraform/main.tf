@@ -30,6 +30,7 @@ resource "aws_launch_template" "web" {
         db_password = var.db_password
         aws_region = var.region
         s3_bucket = var.s3_bucket_name
+        github_repo = var.github_repo
     }))
     lifecycle {
         create_before_destroy = true
