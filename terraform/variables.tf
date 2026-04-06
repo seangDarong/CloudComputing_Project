@@ -19,7 +19,7 @@ variable "vpc_cidr" {
 variable "instance_type" {
     description = "EC2 instance size"
     type = string
-    default = "t3_micro"
+    default = "t3.micro"
     # t3.micro = small, cheap, good for student projects
 }
 

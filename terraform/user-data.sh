@@ -28,7 +28,7 @@ echo "NPM version: $(npm --version)"
 yum install -y git
 
 # ── Step 4: Clone your website from GitHub
-git clone https://github.com/YOURNAME/cloud-computing-project.git /app
+git clone ${github_repo} /app
 
 # ── Step 5: Go into website folder
 cd /app/website

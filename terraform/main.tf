@@ -81,7 +81,7 @@ resource "aws_autoscaling_group" "web" {
 
 resource "aws_autoscaling_policy" "scale_up" {
     name = "${var.project_name}-scale-up"
-    autoscaling_group_name = autoscaling_group.web.name
+    autoscaling_group_name = aws_autoscaling_group.web.name
     adjustment_type = "ChangeInCapacity"
     scaling_adjustment = 1
     cooldown = 120
