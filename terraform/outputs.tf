@@ -22,3 +22,18 @@ output "ec2_security_group_id" {
   description = "Used by RDS teammate to allow DB access from EC2"
   value       = aws_security_group.ec2.id
 }
+
+output "database_endpoint" {
+  description = "MySQL endpoint for the application"
+  value       = aws_db_instance.mysql.address
+}
+
+output "s3_bucket_name" {
+  description = "Bucket used for student photos"
+  value       = aws_s3_bucket.photos.bucket
+}
+
+output "s3_bucket_arn" {
+  description = "ARN of the photo storage bucket"
+  value       = aws_s3_bucket.photos.arn
+}
