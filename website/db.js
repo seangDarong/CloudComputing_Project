@@ -21,6 +21,28 @@ const pool = mysql.createPool({
 })
 
 async function initializeSchema() {
+  const dbName = process.env.DB_NAME
+
+  if (!dbName) {
+    throw new Error('DB_NAME is missing in environment variables')
+  }
+
+  if (!/^[A-Za-z0-9_]+$/.test(dbName)) {
+    throw new Error('DB_NAME contains invalid characters. Use letters, numbers, and underscore only.')
+  }
+
+  const adminConnection = await mysql.createConnection({
+    host     : process.env.DB_HOST,
+    user     : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+  })
+
+  try {
+    await adminConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``)
+  } finally {
+    await adminConnection.end()
+  }
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS students (
       id INT AUTO_INCREMENT PRIMARY KEY,
