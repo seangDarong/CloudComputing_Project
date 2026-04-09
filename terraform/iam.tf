@@ -18,9 +18,30 @@ resource "aws_iam_role_policy_attachment" "cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+data "aws_iam_policy_document" "ec2_s3_access" {
+  statement {
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.photos.arn]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    resources = ["${aws_s3_bucket.photos.arn}/uploads/*"]
+  }
+}
+
+resource "aws_iam_policy" "ec2_s3_access" {
+  name   = "${var.project_name}-s3-access"
+  policy = data.aws_iam_policy_document.ec2_s3_access.json
+}
+
 resource "aws_iam_role_policy_attachment" "s3" {
-  role = aws_iam_role.ec2_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.ec2_s3_access.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ssm" {
