@@ -56,10 +56,13 @@ resource "aws_cloudwatch_dashboard" "main" {
     widgets = [
         {
             type = "metric"
-            x = 0; y = 0; width = 12; height = 6
+            x = 0 
+            y = 0 
+            width = 12 
+            height = 6
             properties = {
                 title = "EC2 CPU Utilization"
-                metrics = [["AWS/EC2", "CPUUtilization", "AutoScalingGroup", aws_autoscaling_group.web.name]]
+                metrics = [["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", aws_autoscaling_group.web.name]]
                 period = 300
                 stat = "Average"
                 view = "timeSeries"
@@ -67,10 +70,13 @@ resource "aws_cloudwatch_dashboard" "main" {
         },
         {
             type = "metric"
-            x = 12; y = 0; width = 12; height = 6
+            x = 12 
+            y = 0 
+            width = 12 
+            height = 6
             properties = {
                 title = "ALB Request Count"
-                metrics = [["AWS/ApplicationELB", "RequestCount", "LoadBalancer", aws_lb_main.arn_suffix]]
+                metrics = [["AWS/ApplicationELB", "RequestCount", "LoadBalancer", aws_lb.main.arn_suffix]]
                 period = 300
                 stat = "Sum"
                 view = "timeSeries"
@@ -78,10 +84,13 @@ resource "aws_cloudwatch_dashboard" "main" {
         },
         {
             type = "metric"
-            x = 0; y = 6; width = 12; height = 6
+            x = 0 
+            y = 6 
+            width = 12 
+            height = 6
             properties = {
                 title = "ASG Instance Count"
-                metrics = [["AWS/AutoScaling", "GroupInServiceInstances", "GroupInServiceInstances", aws_autoscaling_group.web.name]]
+                metrics = [["AWS/AutoScaling", "GroupInServiceInstances", "AutoScalingGroupName", aws_autoscaling_group.web.name]]
                 period = 300
                 stat = "Average"
                 view = "timeSeries"
