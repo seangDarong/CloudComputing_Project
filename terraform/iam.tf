@@ -6,16 +6,16 @@ resource "aws_iam_role" "ec2_role" {
         Statement = [{
             Action = "sts:AssumeRole"
             Effect = "Allow"
-            Principle = {Service = "ec2.amazonaws.com"}
+            Principal = { Service = "ec2.amazonaws.com" }
         }]
     })
 
-    tags = { Name = "${var.project.name}-ec2-role"}
+    tags = { Name = "${var.project_name}-ec2-role"}
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch" {
   role = aws_iam_role.ec2_role.name
-  policy_arn = "arm:aws:iam::aws:policy/CloudWatchAgentServicePolicy"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "s3" {
