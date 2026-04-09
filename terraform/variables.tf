@@ -84,7 +84,7 @@ variable "db_instance_class" {
 variable "s3_bucket_name" {
   description = "S3 bucket name for student photos"
   type        = string
-  default     = "student-project-photos-2024"
+  default     = "cadt-gen10-g4-y3-t2-cloud-final-project-sd-sp-rb-pl"
   # S3 bucket names must be globally unique!
   # Change this to something unique
 }

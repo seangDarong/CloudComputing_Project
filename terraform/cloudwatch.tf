@@ -65,7 +65,12 @@ resource "aws_cloudwatch_dashboard" "main" {
                 metrics = [["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", aws_autoscaling_group.web.name]]
                 period = 300
                 stat = "Average"
+                region = var.region
                 view = "timeSeries"
+                annotations = {
+                  horizontal = []
+                  vertical   = []
+                }
             }
         },
         {
@@ -79,7 +84,12 @@ resource "aws_cloudwatch_dashboard" "main" {
                 metrics = [["AWS/ApplicationELB", "RequestCount", "LoadBalancer", aws_lb.main.arn_suffix]]
                 period = 300
                 stat = "Sum"
+                region = var.region
                 view = "timeSeries"
+                annotations = {
+                  horizontal = []
+                  vertical   = []
+                }
             }
         },
         {
@@ -93,7 +103,12 @@ resource "aws_cloudwatch_dashboard" "main" {
                 metrics = [["AWS/AutoScaling", "GroupInServiceInstances", "AutoScalingGroupName", aws_autoscaling_group.web.name]]
                 period = 300
                 stat = "Average"
+                region = var.region
                 view = "timeSeries"
+                annotations = {
+                  horizontal = []
+                  vertical   = []
+                }
             }
         }
     ]

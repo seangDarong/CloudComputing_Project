@@ -20,7 +20,10 @@ resource "aws_iam_role_policy_attachment" "cloudwatch" {
 
 data "aws_iam_policy_document" "ec2_s3_access" {
   statement {
-    actions   = ["s3:ListBucket"]
+    actions = [
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+    ]
     resources = [aws_s3_bucket.photos.arn]
   }
 
