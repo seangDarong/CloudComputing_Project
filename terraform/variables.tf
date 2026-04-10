@@ -51,6 +51,12 @@ variable "asg_desired_capacity" {
   # Normally run 2 servers
 }
 
+variable "asg_target_requests_per_target" {
+  description = "Target ALB requests per target for autoscaling"
+  type        = number
+  default     = 20
+}
+
 
 # ── Database
 variable "db_name" {

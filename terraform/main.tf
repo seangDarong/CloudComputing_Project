@@ -61,6 +61,18 @@ resource "aws_autoscaling_group" "web" {
   health_check_type         = "ELB"
   health_check_grace_period = 300
 
+  metrics_granularity = "1Minute"
+  enabled_metrics = [
+    "GroupMinSize",
+    "GroupMaxSize",
+    "GroupDesiredCapacity",
+    "GroupInServiceInstances",
+    "GroupPendingInstances",
+    "GroupStandbyInstances",
+    "GroupTerminatingInstances",
+    "GroupTotalInstances",
+  ]
+
   target_group_arns = [aws_lb_target_group.web.arn]
 
   lifecycle {
@@ -94,4 +106,19 @@ resource "aws_autoscaling_policy" "scale_down" {
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = -1
   cooldown               = 120
+}
+
+resource "aws_autoscaling_policy" "request_count_target" {
+  name                   = "${var.project_name}-alb-req-target"
+  autoscaling_group_name = aws_autoscaling_group.web.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ALBRequestCountPerTarget"
+      resource_label         = "${aws_lb.main.arn_suffix}/${aws_lb_target_group.web.arn_suffix}"
+    }
+
+    target_value = var.asg_target_requests_per_target
+  }
 }
